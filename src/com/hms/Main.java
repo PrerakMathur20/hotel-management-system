@@ -9,6 +9,7 @@ class ReaderThread implements Runnable {
     @Override
     public void run() {
         try {
+            // Read the csv file
             FileHandling.readFromCSV();
         } catch (Exception e) {
             e.printStackTrace();
