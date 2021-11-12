@@ -2,13 +2,8 @@ package com.hms;
 
 import java.util.*;
 import com.hms.fileHandling.FileHandling;
-import com.hms.Hotel;
-import com.hms.rooms.Room;
-import com.hms.persons.Address;
 import com.hms.persons.Guest;
 import com.hms.persons.Staff;
-
-import java.io.*;
 
 class ReaderThread implements Runnable {
     @Override
@@ -34,7 +29,7 @@ public class Main {
         }
         // ---------------------------
 
-        // main(); Body
+        // Main() Body
         Scanner cin = new Scanner(System.in);
         boolean done = false;
         while (!done) {
@@ -52,6 +47,7 @@ public class Main {
             System.out.print("\n\nEnter your choice:\n");
             inp = cin.next();
             inp += cin.nextLine();
+            // Exception Handling to prevent user from entering invalid input
             try {
                 choice = Integer.parseInt(inp);
             } catch (Exception e) {
@@ -61,6 +57,7 @@ public class Main {
             System.out.print("\n---------------------------");
 
             switch (choice) {
+                // Login made for Staff Only
             case 1:
                 System.out.print("\n\n---------- LOGIN ----------");
                 System.out.print("\n\n---------------------------\n");
@@ -103,6 +100,7 @@ public class Main {
                             break;
                         }
                         case 3: {
+                            // Options for changing staff details
                             Staff temp_staff = new Staff();
                             temp_staff.getDetails();
                             if (temp_staff.getId().equals(-1))
@@ -126,6 +124,7 @@ public class Main {
                                 break;
                             }
                             case 3: {
+                                // change password
                                 System.out.print("Enter new password: ");
                                 String password1 = cin.next();
                                 temp_staff.setPassword(password1);
@@ -199,6 +198,7 @@ public class Main {
                         }
                         }
                     } else {
+                        // Options for Guest
                         System.out.print("\n---------------------------\n");
                         System.out.println("----EDIT OWN DETAILS----");
                         System.out.println("[01] Change Phone Number ");
@@ -240,16 +240,19 @@ public class Main {
                 Hotel.printRoomDetails();
                 System.out.println("Room Number: ");
                 int roomNum = cin.nextInt();
+                // Check if room exists
                 if (!Hotel.roomsList.containsKey(roomNum)) {
                     System.out.println("Room not Found");
                     break;
                 }
+                // Check if room is available
                 if (!Hotel.roomsList.get(roomNum).isAvailable()) {
                     System.out.println("Room Unavailable");
                     break;
                 }
                 Guest guest = new Guest();
                 guest.inputDetails();
+                // Check if guest exists in database
                 for (var entry : Hotel.guestsList.entrySet()) {
                     int tempID = entry.getValue().getId();
                     entry.getValue().setID(-1);
@@ -261,8 +264,10 @@ public class Main {
                     }
                     entry.getValue().setID(tempID);
                 }
+                
                 guest.addRoomNumber(roomNum);
                 Hotel.roomsList.get(roomNum).book();
+                // Add guest to database
                 guest.setID(Hotel.guestsList.lastEntry().getKey() + 1);
                 Hotel.guestsList.put(guest.getId(), new Guest(guest));
                 break;
